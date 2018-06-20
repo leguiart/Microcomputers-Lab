@@ -1,0 +1,60 @@
+Practica 2: Puertos paralelos
+
+tamaño máximo: 8
+PIC tiene 5 puertos paralelos:
+A,B,C,D,E
+A: 6 bits 
+B: 8 bits    ... pueden ser algunos de Entrada y otros de salida
+C: 8 bits
+D: 8 bits
+E: 3 bits
+
+En los registros TISX se configuran los numero de bits en los 
+puertos paralelos que funcionaran como entrada o salida
+
+TRISX: 0 -> SALIDA
+	   1 -> ENTRADA
+	   
+Para configurar un puerto paralelo:
+1. Cambiar al banco 1
+	bsf status, RP0
+	bcf status, RP1
+2. Configurar el puerto B como salida
+	MOVLW B '00000000'; Todos los bits como salida
+	M0VWF TISB ;Configura como salida
+	
+3. Cambiar al banco 0
+	BCF STATUS, RP0      RP1:0
+					     RP0:0
+    MOVLW H 'AA'
+	MOVWF PORTB
+	            <-- RUTINA DE RETARDO O 5 millones de NOPs :V
+	MOVLW H '55'
+	MOVWF PORT B
+	GOTO LOOP
+											XTAL = 20 MHz
+											frec. funcionamiento del micro: 1/4(XTAL)
+											f= 20/4 = 5 MHz
+											T= 1/f = 1/5MHz = 0.2 useg
+											
+ESTRUCTURA DE UNA RUTINA DE RETARDO:
+
+RETARDO: MOVLW A
+	     MOVWF REGA
+LOOP3: MOVLW B
+	   MOVWF REGB
+LOOP2: MOVLW C
+	   MOVWF REGC
+LOOP1: DSCFSZ REGC
+	   GOTO LOOP1
+	   DECFSZ REGB
+	   GOTO LOOP2
+	   DECFSZ REGA
+	   GOTO LOOP3
+	   RETURN
+		
+La rutina anterior ocupa aproximadamente 50 millones de ciclos de reloj (10 segundos)
+		
+						 
+
+						 
