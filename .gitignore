@@ -1,0 +1,15 @@
+#Ignore Build files
+*.err
+*.lst
+*.mcs
+*.cof
+*.HEX
+*.hex
+*.map
+*.mcs
+*.O
+*.o
+
+#Ignore word files
+*.docx
+
